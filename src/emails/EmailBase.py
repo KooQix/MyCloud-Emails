@@ -24,8 +24,6 @@ class EmailBase:
 		self.base_attach()
 		self.attach()
 
-		# print(self.content)
-		# return
 
 		# Create secure connection with server and send email
 		context = ssl.create_default_context()
