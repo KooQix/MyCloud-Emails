@@ -4,6 +4,10 @@ from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 from email.mime.image import MIMEImage
 
+import pathlib
+
+
+
 from abc import abstractmethod, abstractstaticmethod
 
 class EmailBase:
@@ -40,7 +44,7 @@ class EmailBase:
 		self.message.attach(MIMEText(self.content, "html"))
 
 		# Add app Icon
-		fp = open("../resources/mycloud-icon.png", 'rb')
+		fp = open(str(pathlib.Path(__file__).parent.resolve()) + "/../../resources/mycloud-icon.png", 'rb')
 		msgImage = MIMEImage(fp.read())
 		fp.close()
 		msgImage.add_header("Content-ID", "<mycloudIcon>")
