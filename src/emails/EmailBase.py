@@ -57,6 +57,7 @@ class EmailBase:
 			<!DOCTYPE html>
 			<html lang="en">
 				<head>
+					<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Parisienne">
 					<style>
 					.foot {
 							margin-top: 3em;
@@ -73,13 +74,31 @@ class EmailBase:
 							align-items: center;
 							color: #2e4053;
 
-							font-family: brush script mt;
+							font-family: Parisienne;;
 							font-size: 2em;
 						}
 
 						img {
 							height: 4em;
 							width: 4em;
+						}
+
+						@media screen and (max-width: 890px) {
+							body {
+								padding-left: 0;
+								padding-right: 0;
+								margin-left: 0;
+								margin-right: 0;
+							}
+
+							.sign {
+								font-size: 1.5em;
+							}
+
+							img {
+							height: 3em;
+							width: 3em;
+							}
 						}
 
 		""" + html_styles + """
