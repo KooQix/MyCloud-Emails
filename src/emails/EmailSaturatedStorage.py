@@ -1,34 +1,40 @@
 from emails.EmailBase import EmailBase
 import os
 
+from pydantic import BaseModel
+
+class EmailSaturatedStorageModel(BaseModel):
+	"""Send email when storage is saturated
+
+		Args:
+			args (list): [(disk_name, usage), ...)]
+	"""
+	args: list
+
 class EmailSaturatedStorage(EmailBase):
 	def __init__(self, args: list):
-		self.args = args[0].replace(' ', '').split(',')
+		"""Send email when storage is saturated
+
+		Args:
+			args (list): [(disk_name, usage), ...)]
+		"""
+		self.args = args
 		super().__init__()
-
-	def validate_args(args: list):
-		"""
-		Args like "name_disk_1: percentage_usage, name_disk_2: percentage_usage"
-		"""
-		return len(args) == 1 and len(args[0].split(':')) > 0
-
-	def err_usage():
-		print("args: \n- 'name_disk_1: percentage_usage, name_disk_2: percentage_usage'")
 
 	def get_subject(self):
 		subject = '[MyCloud Saturated Storage] Saturated Storage'
 		return subject
 
 	def get_receivers(self):
-		email_receivers = os.environ.get('MyCloud_Receivers_SaturatedStorage').replace(' ', '').split(',')
+		email_receivers = os.environ.get('MyCloud_Emails_Receivers_SaturatedStorage').replace(' ', '').split(',')
 		return email_receivers
 
 	def get_html_body(self):
 		table_content = ''
 
 		for arg in self.args:
-			disk_name = arg.split(':')[0]
-			usage = arg.split(':')[1]
+			disk_name = arg[0]
+			usage = arg[1]
 			table_content += f"""
 				<tr>
 					<td>{disk_name}</td>

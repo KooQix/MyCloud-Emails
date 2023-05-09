@@ -1,27 +1,29 @@
 from emails.EmailBase import EmailBase
 import os
 
+from pydantic import BaseModel
+
+class EmailErrorsModel(BaseModel):
+	"""Send email when storage is saturated
+
+		Args:
+			subject (str): Subject
+			error_message (str): Error message
+	"""
+	subject: str
+	error_message: str
+
 class EmailErrors(EmailBase):
-	def __init__(self, args: list):
-		self.subject = args[0]
-		self.error_message = args[1]
+	def __init__(self, subject: str, error_message: str):
+		self.subject = subject
+		self.error_message = error_message
 		super().__init__()
-
-	def validate_args(args: list):
-		"""
-		Args like: 'subject' 'error_message'
-		"""
-		return len(args) == 2
-
-	def err_usage():
-		print("args: \n- 'subject' 'error_message'")
-				
 
 	def get_subject(self):
 		return self.subject
 
 	def get_receivers(self):
-		email_receivers = os.environ.get('MyCloud_Receivers_Default').replace(' ', '').split(',')
+		email_receivers = os.environ.get('MyCloud_Emails_Receivers_Default').replace(' ', '').split(',')
 		return email_receivers
 
 	def get_html_body(self):

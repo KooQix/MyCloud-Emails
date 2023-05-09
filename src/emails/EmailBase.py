@@ -10,7 +10,7 @@ import pathlib
 
 from abc import abstractmethod, abstractstaticmethod
 
-class EmailBase:
+class EmailBase():
 	sender_email = os.environ.get("MyCloud_Emails_SENDER")
 	sender_pass = os.environ.get("MyCloud_Emails_PASS")
 
@@ -119,13 +119,6 @@ class EmailBase:
 	
 	#################### To Override ####################
 	
-	@abstractstaticmethod
-	def validate_args(args: list):
-		return True
-		
-	@abstractstaticmethod
-	def err_usage():
-		pass
 
 	@abstractmethod
 	def get_subject(self):

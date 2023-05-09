@@ -2,24 +2,34 @@ from email.mime.text import MIMEText
 from emails.EmailBase import EmailBase
 import os
 
-class EmailCheckIP(EmailBase):
-	def __init__(self, args):
-		self.new_ip = args[0]
+from pydantic import BaseModel
+
+class EmailCheckIPModel(BaseModel):
+	"""Send an email when new IP
+
+		Args:
+			new_ip (str): New IP
+	"""
+	new_ip: str
+
+
+class EmailCheckIP(EmailBase):	
+	def __init__(self, new_ip: str):
+		"""Send an email when new IP
+
+		Args:
+			new_ip (str): New IP
+		"""
+		self.new_ip = new_ip
 		super().__init__()
 
-
-	def validate_args(args: list):
-		return len(args) == 1 and len(args[0].split('.')) == 4
-
-	def err_usage():
-		print("args: \n- New IP address")
 
 	def get_subject(self):
 		subject = '[MyCloud IP] IP has changed'
 		return subject
 
 	def get_receivers(self):
-		email_receivers = os.environ.get('MyCloud_Receivers_CheckIP').replace(' ', '').split(',')
+		email_receivers = os.environ.get('MyCloud_Emails_Receivers_CheckIP').replace(' ', '').split(',')
 		return email_receivers
 
 	def get_html_body(self):

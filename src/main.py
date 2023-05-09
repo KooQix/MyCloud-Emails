@@ -4,56 +4,58 @@ load_dotenv()
 import os
 
 import sys
+
 from emails.EmailBase import EmailBase
 
-from emails.EmailCheckIP import EmailCheckIP
-from emails.EmailSaturatedStorage import EmailSaturatedStorage
-from emails.EmailErrors import EmailErrors
+from emails.EmailCheckIP import EmailCheckIP, EmailCheckIPModel
+from emails.EmailSaturatedStorage import EmailSaturatedStorage, EmailSaturatedStorageModel
+from emails.EmailErrors import EmailErrors, EmailErrorsModel
+from emails.EmailGeneral import EmailGeneral, EmailGeneralModel
 
-USAGE="python main.py <email-type> <args>"
+from fastapi import FastAPI, HTTPException
+import datetime
 
-COMMANDS: dict[str, EmailBase] = {
-	"check-ip": EmailCheckIP,
-	"saturated-storage": EmailSaturatedStorage,
-	"error": EmailErrors
-}
-
-def print_usage():
-	print(USAGE)
-	print("\nAvailable email-type: ")
-	print(list(COMMANDS.keys()))
-	print("\n")
+USAGE="uvicorn main:app"
 
 
-email_type = sys.argv[1]
-if email_type in COMMANDS.keys():
-	# Verification for each
-	email_class = COMMANDS[email_type]
-	args = sys.argv[2:] if len(sys.argv) > 2 else []
+
+app = FastAPI()
 
 
-	if email_class.validate_args(args):
+def send(email: EmailBase):
+	try:
+		email.send()
+		return {"message": "Email sent!"}
+	except Exception as e:
+		print(datetime.datetime.now().strftime("\n%Y-%m-%d %H:%M:%S:\n"))
+		print(f"Error sending email:\n{e.with_traceback()}")
+
 		try:
-			em: EmailBase = email_class(args)
-			em.send()
-			print("Sent!")
-
+			err_email = EmailErrors(f"[Error] {email.get_subject()}", f"{e.with_traceback()}")
+			err_email.send()
 		except Exception as e:
-			print_usage()
-			print(f"--- {email_class.__name__} ---\n")
-			email_class.err_usage()
-			print("\n")
+			print(datetime.datetime.now().strftime("\n%Y-%m-%d %H:%M:%S:\n"))
+			print(f"Error sending error email:\n{e.with_traceback()}")
 
-			# Send err mail
-			email_err = EmailErrors((em.get_subject(), e))
-			email_err.send()
+		raise HTTPException(status_code=500, detail=f"An error occurred while handling the task: {e}")
+	
 
-			print("Error sending email: ")
-			print(e.with_traceback())
-	else:
-		print_usage()
-		print(f"--- {email_class.__name__} ---\n")
-		email_class.err_usage()
+#########	Endpoints #########
 
-else:
-	print_usage()
+
+@app.post("/general")
+def check_ip(model: EmailGeneralModel):
+	return send(EmailGeneral(model.subject, model.body, model.receivers, model.styles))
+
+@app.post("/check-ip")
+def check_ip(model: EmailCheckIPModel):
+	return send(EmailCheckIP(model.new_ip))
+
+
+@app.post("/saturated-storage")
+def check_ip(model: EmailSaturatedStorageModel):
+	return send(EmailSaturatedStorage(model.args))
+
+@app.post("/error")
+def check_ip(model: EmailErrorsModel):
+	return send(EmailErrors(model.subject, model.error_message))

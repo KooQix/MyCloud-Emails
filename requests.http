@@ -1,0 +1,40 @@
+### General
+POST http://localhost:8000/general
+Content-Type: application/json
+
+{
+	"subject": "This is the subject",
+	"body": "HTML body of the email",
+	"receivers": ["kooqix.dev@gmail.com"]
+}
+
+### Check IP
+POST http://localhost:8000/check-ip
+Content-Type: application/json
+
+{
+	"new_ip": "192.168.1.1"
+}
+
+
+
+### Error Message
+POST http://localhost:8000/error
+Content-Type: application/json
+
+{
+	"subject": "This is the subject",
+	"error_message": "This is the error message"
+}
+
+
+### Saturated Storage
+POST http://localhost:8000/saturated-storage
+Content-Type: application/json
+
+{
+	"args": [
+		["disk_1", 82],
+		["disk_2", 90]
+	]
+}
