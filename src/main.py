@@ -7,11 +7,15 @@ import sys
 from emails.EmailBase import EmailBase
 
 from emails.EmailCheckIP import EmailCheckIP
+from emails.EmailSaturatedStorage import EmailSaturatedStorage
+from emails.EmailErrors import EmailErrors
 
 USAGE="python main.py <email-type> <args>"
 
 COMMANDS: dict[str, EmailBase] = {
-	"check-ip": EmailCheckIP
+	"check-ip": EmailCheckIP,
+	"saturated-storage": EmailSaturatedStorage,
+	"error": EmailErrors
 }
 
 def print_usage():
@@ -27,6 +31,7 @@ if email_type in COMMANDS.keys():
 	email_class = COMMANDS[email_type]
 	args = sys.argv[2:] if len(sys.argv) > 2 else []
 
+
 	if email_class.validate_args(args):
 		try:
 			em: EmailBase = email_class(args)
@@ -38,6 +43,11 @@ if email_type in COMMANDS.keys():
 			print(f"--- {email_class.__name__} ---\n")
 			email_class.err_usage()
 			print("\n")
+
+			# Send err mail
+			email_err = EmailErrors((em.get_subject(), e))
+			email_err.send()
+
 			print("Error sending email: ")
 			print(e.with_traceback())
 	else:

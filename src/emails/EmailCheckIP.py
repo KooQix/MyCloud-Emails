@@ -1,6 +1,6 @@
 from email.mime.text import MIMEText
 from emails.EmailBase import EmailBase
-
+import os
 
 class EmailCheckIP(EmailBase):
 	def __init__(self, args):
@@ -19,9 +19,7 @@ class EmailCheckIP(EmailBase):
 		return subject
 
 	def get_receivers(self):
-		email_receivers = [
-			"kooqix.dev@gmail.com"
-		]
+		email_receivers = os.environ.get('MyCloud_Receivers_CheckIP').replace(' ', '').split(',')
 		return email_receivers
 
 	def get_html_body(self):
