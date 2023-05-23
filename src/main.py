@@ -38,7 +38,7 @@ def send(email: EmailBase):
 			print(datetime.datetime.now().strftime("\n%Y-%m-%d %H:%M:%S:\n"))
 			print(f"Error sending error email:\n{e.with_traceback()}")
 
-		raise HTTPException(status_code=500, detail=f"An error occurred while handling the task: {e}")
+		return JSONResponse(status_code=500, content={"message": f"An error occurred while handling the task: {e}"})
 	
 
 #########	Endpoints #########
@@ -47,14 +47,17 @@ def send(email: EmailBase):
 async def verif_auth(request: Request, call_next):
 	try:
 		authorization_token = request.headers["Authorization"]
+		print(request.headers)
+		print('\n')
+		print(authorization_token)
 	except Exception:
-		return JSONResponse(status_code=401, content="Unauthorized")
+		return JSONResponse(status_code=401, content={"message": "Unauthorized"})
 
 	if authorization_token == os.environ.get("MyCloud_Emails_TOKEN"):
 		response = await call_next(request)
 		return response
 	else:
-		return JSONResponse(status_code=401, content="Unauthorized")
+		return JSONResponse(status_code=401, content={"message": "Unauthorized"})
 
 
 @app.post("/general")
