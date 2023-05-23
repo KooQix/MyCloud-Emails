@@ -12,7 +12,7 @@ from emails.EmailSaturatedStorage import EmailSaturatedStorage, EmailSaturatedSt
 from emails.EmailErrors import EmailErrors, EmailErrorsModel
 from emails.EmailGeneral import EmailGeneral, EmailGeneralModel
 
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, Request
 import datetime
 
 USAGE="uvicorn main:app"
@@ -41,6 +41,16 @@ def send(email: EmailBase):
 	
 
 #########	Endpoints #########
+
+@app.middleware("http")
+async def verif_auth(request: Request, call_next):
+	authorization_token = request.headers["Authorization"]
+
+	if authorization_token == os.environ.get("MyCloud_Emails_TOKEN"):
+		response = await call_next(request)
+		return response
+	else:
+		raise HTTPException(status_code=401, detail="Unauthorized")
 
 
 @app.post("/general")

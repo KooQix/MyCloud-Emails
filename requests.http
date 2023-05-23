@@ -1,5 +1,5 @@
 ### General
-POST http://localhost:8000/general
+POST https://mycloud-emails.kooqix-dev.com/general
 Content-Type: application/json
 
 {
@@ -9,7 +9,7 @@ Content-Type: application/json
 }
 
 ### Check IP
-POST http://localhost:8000/check-ip
+POST https://mycloud-emails.kooqix-dev.com/check-ip
 Content-Type: application/json
 
 {
@@ -19,7 +19,7 @@ Content-Type: application/json
 
 
 ### Error Message
-POST http://localhost:8000/error
+POST https://mycloud-emails.kooqix-dev.com/error
 Content-Type: application/json
 
 {
@@ -29,7 +29,7 @@ Content-Type: application/json
 
 
 ### Saturated Storage
-POST http://localhost:8000/saturated-storage
+POST https://mycloud-emails.kooqix-dev.com/saturated-storage
 Content-Type: application/json
 
 {
