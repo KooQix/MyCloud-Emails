@@ -14,6 +14,7 @@ from emails.EmailGeneral import EmailGeneral, EmailGeneralModel
 
 from fastapi import FastAPI, HTTPException, Request
 import datetime
+from fastapi.responses import JSONResponse
 
 USAGE="uvicorn main:app"
 
@@ -47,13 +48,13 @@ async def verif_auth(request: Request, call_next):
 	try:
 		authorization_token = request.headers["Authorization"]
 	except Exception:
-		raise HTTPException(status_code=401, detail="Unauthorized")
+		return JSONResponse(status_code=401, content="Unauthorized")
 
 	if authorization_token == os.environ.get("MyCloud_Emails_TOKEN"):
 		response = await call_next(request)
 		return response
 	else:
-		raise HTTPException(status_code=401, detail="Unauthorized")
+		return JSONResponse(status_code=401, content="Unauthorized")
 
 
 @app.post("/general")
