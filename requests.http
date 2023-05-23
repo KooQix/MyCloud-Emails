@@ -1,7 +1,7 @@
 ### General
 POST https://mycloud-emails.kooqix-dev.com/general
 Content-Type: application/json
-Authorization: "$2b$10$UYojFDnAvO2E1EnAsikEvOuf9Swq6pnanNK7hOdfZ51ZG/HPPx/HO"
+Authorization: token
 
 {
 	"subject": "This is the subject",
