@@ -47,9 +47,6 @@ def send(email: EmailBase):
 async def verif_auth(request: Request, call_next):
 	try:
 		authorization_token = request.headers["Authorization"]
-		print(request.headers)
-		print('\n')
-		print(authorization_token)
 	except Exception:
 		return JSONResponse(status_code=401, content={"message": "Unauthorized"})
 
