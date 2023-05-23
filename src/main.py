@@ -44,7 +44,10 @@ def send(email: EmailBase):
 
 @app.middleware("http")
 async def verif_auth(request: Request, call_next):
-	authorization_token = request.headers["Authorization"]
+	try:
+		authorization_token = request.headers["Authorization"]
+	except Exception:
+		raise HTTPException(status_code=401, detail="Unauthorized")
 
 	if authorization_token == os.environ.get("MyCloud_Emails_TOKEN"):
 		response = await call_next(request)
