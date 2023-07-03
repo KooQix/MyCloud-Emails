@@ -1,4 +1,5 @@
 ### General
+
 POST https://mycloud-emails.kooqix-dev.com/general
 Content-Type: application/json
 Authorization: token
