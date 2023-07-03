@@ -11,7 +11,7 @@ Authorization: {{ token }}
 {
 	"subject": "This is the subject",
 	"body": "HTML body of the email",
-	"receivers": ["kooqix.dev@gmail.com"]
+	"receivers": ["email@example.com"]
 }
 
 ### Check IP
