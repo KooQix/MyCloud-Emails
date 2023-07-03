@@ -4,11 +4,13 @@ from pydantic import BaseModel
 from typing import Optional
 
 class EmailGeneralModel(BaseModel):
-	"""Send an email when new IP
+	"""Send an general email
 
-		Args:
-			subject (str): Subject
-			body (str): Body
+	Args:
+		receivers (list[str]): Receivers
+		subject (str): Subject
+		body (str): Body (HTML)
+		styles (Optional[str]): CSS Styles
 	"""
 	receivers: list
 	subject: str
@@ -17,7 +19,7 @@ class EmailGeneralModel(BaseModel):
 
 class EmailGeneral(EmailBase):
 	def __init__(self, subject: str, body: str, receivers: list, styles: str = None):
-		"""Send an email when new IP
+		"""Send a general email
 
 		Args:
 			subject (str): Subject

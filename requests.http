@@ -1,8 +1,12 @@
+# Define some variables
+@host = ""
+@token = ""
+
 ### General
 
-POST https://mycloud-emails.kooqix-dev.com/general
+POST https://{{ host }}/general
 Content-Type: application/json
-Authorization: token
+Authorization: {{ token }}
 
 {
 	"subject": "This is the subject",
@@ -11,8 +15,9 @@ Authorization: token
 }
 
 ### Check IP
-POST https://mycloud-emails.kooqix-dev.com/check-ip
+POST https://{{ host }}/check-ip
 Content-Type: application/json
+Authorization: {{ token }}
 
 {
 	"new_ip": "192.168.1.1"
@@ -21,8 +26,9 @@ Content-Type: application/json
 
 
 ### Error Message
-POST https://mycloud-emails.kooqix-dev.com/error
+POST https://{{ host }}/error
 Content-Type: application/json
+Authorization: {{ token }}
 
 {
 	"subject": "This is the subject",
@@ -31,8 +37,9 @@ Content-Type: application/json
 
 
 ### Saturated Storage
-POST https://mycloud-emails.kooqix-dev.com/saturated-storage
+POST https://{{ host }}/saturated-storage
 Content-Type: application/json
+Authorization: {{ token }}
 
 {
 	"args": [

@@ -11,6 +11,8 @@ import pathlib
 from abc import abstractmethod, abstractstaticmethod
 
 class EmailBase():
+	"""Base class for sending email
+	"""
 	sender_email = os.environ.get("MyCloud_Emails_SENDER")
 	sender_pass = os.environ.get("MyCloud_Emails_PASS")
 
@@ -40,7 +42,8 @@ class EmailBase():
 
 
 	def base_attach(self):
-		# Add html parts to message
+		"""Add html parts to message
+		"""
 		self.message.attach(MIMEText(self.content, "html"))
 
 		# Add app Icon
@@ -52,6 +55,8 @@ class EmailBase():
 
 
 	def get_html(self, html_body: str, styles = None):
+		"""HTML base template for email
+		"""
 		html_styles = styles if styles != None else ''
 		return """
 			<!DOCTYPE html>
@@ -122,25 +127,47 @@ class EmailBase():
 
 	@abstractmethod
 	def get_subject(self):
+		"""Return subject of email
+
+		Returns:
+			str: Subject of the email
+		"""
 		subject = ''
 		return subject
 
 	@abstractmethod
 	def get_receivers(self):
+		"""Get the receivers of the email
+
+		Returns:
+			list[str]: List of email receivers
+		"""
 		email_receivers = []
 		return email_receivers
 
 	@abstractmethod
 	def attach(self):
+		"""To attach files to email
+		"""
 		pass
 
 	@abstractmethod
 	def get_html_body(self):
+		"""Get the html body of the email
+
+		Returns:
+			str: HTML body of the email
+		"""
 		html_body = ''
 		return html_body
 
 	@abstractmethod
 	def get_html_styles(self):
+		"""Get the html styles of the email
+
+		Returns:
+			str: HTML styles of the email
+		"""
 		html_styles = ''
 		return html_styles
 

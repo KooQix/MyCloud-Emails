@@ -4,7 +4,7 @@ import os
 from pydantic import BaseModel
 
 class EmailErrorsModel(BaseModel):
-	"""Send email when storage is saturated
+	"""Send email when an error happens
 
 		Args:
 			subject (str): Subject
