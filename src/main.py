@@ -18,6 +18,10 @@ from fastapi.responses import JSONResponse
 
 USAGE="uvicorn main:app"
 
+EMAILS_TOKEN = os.environ.get("MyCloud_Emails_TOKEN")
+if EMAILS_TOKEN is None:
+	print("No token found. Please set the environment variable MyCloud_Emails_TOKEN")
+	sys.exit(1)
 
 
 app = FastAPI()
@@ -47,10 +51,12 @@ def send(email: EmailBase):
 async def verif_auth(request: Request, call_next):
 	try:
 		authorization_token = request.headers["Authorization"]
+		if authorization_token is None:
+			raise TypeError()
 	except Exception:
 		return JSONResponse(status_code=401, content={"message": "Unauthorized"})
 
-	if authorization_token == os.environ.get("MyCloud_Emails_TOKEN"):
+	if authorization_token == EMAILS_TOKEN:
 		response = await call_next(request)
 		return response
 	else:
